@@ -22,9 +22,7 @@ workflows:
       - app/build/outputs/apk/debug/app-debug.apk
       - app/build/outputs/androidTest-results/connected/**/*.xml
       - emulator.log
-    test_report:
-      - app/build/outputs/androidTest-results/connected/**/*.xml
-  
+    
   android-ui-tests-Linux_x4:
     name: Android UI Tests Linux X4
     instance_type: linux_x4
@@ -48,5 +46,4 @@ workflows:
       - app/build/outputs/apk/debug/app-debug.apk
       - app/build/outputs/androidTest-results/connected/**/*.xml
       - emulator.log
-    test_report:
-      - app/build/outputs/androidTest-results/connected/**/*.xml
+    
