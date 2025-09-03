@@ -2,6 +2,7 @@ workflows:
   android-ui-tests-Linux_x2:
     name: Android UI Tests Linux X2
     instance_type: linux_x2
+    working_directory: ui/espresso/BasicSample
     max_build_duration: 60
     environment:
       vars:
@@ -26,6 +27,7 @@ workflows:
   android-ui-tests-Linux_x4:
     name: Android UI Tests Linux X4
     instance_type: linux_x4
+    working_directory: ui/espresso/BasicSample
     max_build_duration: 60
     environment:
       vars:
