@@ -48,4 +48,120 @@ workflows:
       - app/build/outputs/apk/debug/app-debug.apk
       - app/build/outputs/androidTest-results/connected/**/*.xml
       - emulator.log
+
+  android-ui-tests-extended-linux_x2:
+    name: Android UI Tests Extended Linux X2
+    instance_type: linux_x2
+    max_build_duration: 90
+    environment:
+      vars:
+        ANDROID_EMULATOR_NAME: "emulator-34"
+    scripts:
+      - name: Build BasicSample Debug APK
+        working_directory: ui/espresso/BasicSample
+        script: ./gradlew assembleDebug
+
+      - name: Run BasicSample UI Tests
+        working_directory: ui/espresso/BasicSample
+        script: |
+          $ANDROID_HOME/emulator/emulator -avd $ANDROID_EMULATOR_NAME -no-window -no-audio &
+          adb wait-for-device
+          adb shell input keyevent 82
+          ./gradlew connectedAndroidTest
+
+      - name: Build IdlingResourceSample Debug APK
+        working_directory: ui/espresso/IdlingResourceSample
+        script: ./gradlew assembleDebug
+
+      - name: Run IdlingResourceSample UI Tests
+        working_directory: ui/espresso/IdlingResourceSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Build RecyclerViewSample Debug APK
+        working_directory: ui/espresso/RecyclerViewSample
+        script: ./gradlew assembleDebug
+
+      - name: Run RecyclerViewSample UI Tests
+        working_directory: ui/espresso/RecyclerViewSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Build IntentsAdvancedSample Debug APK
+        working_directory: ui/espresso/IntentsAdvancedSample
+        script: ./gradlew assembleDebug
+
+      - name: Run IntentsAdvancedSample UI Tests
+        working_directory: ui/espresso/IntentsAdvancedSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Collect Emulator Logs
+        script: adb logcat -d > emulator.log
+
+    artifacts:
+      - ui/espresso/BasicSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/BasicSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/IdlingResourceSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/IdlingResourceSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/RecyclerViewSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/RecyclerViewSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/IntentsAdvancedSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/IntentsAdvancedSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - emulator.log
+
+  android-ui-tests-extended-linux_x4:
+    name: Android UI Tests Extended Linux X4
+    instance_type: linux_x4
+    max_build_duration: 90
+    environment:
+      vars:
+        ANDROID_EMULATOR_NAME: "emulator-34"
+    scripts:
+      - name: Build BasicSample Debug APK
+        working_directory: ui/espresso/BasicSample
+        script: ./gradlew assembleDebug
+
+      - name: Run BasicSample UI Tests
+        working_directory: ui/espresso/BasicSample
+        script: |
+          $ANDROID_HOME/emulator/emulator -avd $ANDROID_EMULATOR_NAME -no-window -no-audio &
+          adb wait-for-device
+          adb shell input keyevent 82
+          ./gradlew connectedAndroidTest
+
+      - name: Build IdlingResourceSample Debug APK
+        working_directory: ui/espresso/IdlingResourceSample
+        script: ./gradlew assembleDebug
+
+      - name: Run IdlingResourceSample UI Tests
+        working_directory: ui/espresso/IdlingResourceSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Build RecyclerViewSample Debug APK
+        working_directory: ui/espresso/RecyclerViewSample
+        script: ./gradlew assembleDebug
+
+      - name: Run RecyclerViewSample UI Tests
+        working_directory: ui/espresso/RecyclerViewSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Build IntentsAdvancedSample Debug APK
+        working_directory: ui/espresso/IntentsAdvancedSample
+        script: ./gradlew assembleDebug
+
+      - name: Run IntentsAdvancedSample UI Tests
+        working_directory: ui/espresso/IntentsAdvancedSample
+        script: ./gradlew connectedAndroidTest
+
+      - name: Collect Emulator Logs
+        script: adb logcat -d > emulator.log
+
+    artifacts:
+      - ui/espresso/BasicSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/BasicSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/IdlingResourceSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/IdlingResourceSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/RecyclerViewSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/RecyclerViewSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - ui/espresso/IntentsAdvancedSample/app/build/outputs/apk/debug/app-debug.apk
+      - ui/espresso/IntentsAdvancedSample/app/build/outputs/androidTest-results/connected/**/*.xml
+      - emulator.log
     
