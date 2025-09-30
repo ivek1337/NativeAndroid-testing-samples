@@ -1,4 +1,38 @@
 workflows:
+  test java extraction:
+    name: jave ver extraction
+    instance_type: linux_x2
+    working_directory: ui/espresso/BasicSample
+    max_build_duration: 60
+    environment:
+      vars:
+        ANDROID_EMULATOR_NAME: "emulator-34" # Use one of Codemagic's preinstalled emulators: emulator, emulator-35, emulator-36
+    scripts:
+      - name: Extract Java version from build.gradle and set JAVA_VERSION
+        script: |
+          set -e
+          BUILD_FILE="build.gradle"
+          VERSION_EXTRACTOR="grep -E 'javaVersion\s*=' \"$BUILD_FILE\" | sed -E 's/.*JavaVersion\.VERSION_([0-9]+).*/\1/'"
+          javaVersion=$(eval "$VERSION_EXTRACTOR")
+          if [[ -z "$javaVersion" ]]; then
+            echo "Java version not found in $BUILD_FILE"
+            exit 1
+          fi
+          echo "javaVersion: $javaVersion"
+          envman add --key JAVA_VERSION --value "${javaVersion}"
+      - name: Set JAVA_HOME based on JAVA_VERSION
+        script: |
+          export JAVA_HOME="/usr/lib/jvm/java-$JAVA_VERSION-openjdk-amd64"
+          echo "JAVA_HOME=$JAVA_HOME" >> $CM_ENV
+      - name: Build with extracted Java version
+        script: |
+          echo "Using JAVA_VERSION=$JAVA_VERSION and JAVA_HOME=$JAVA_HOME"
+          ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/app-debug.apk
+      - app/build/outputs/androidTest-results/connected/**/*.xml
+      - emulator.log
+
   android-ui-tests-Linux_x2:
     name: Android UI Tests Linux X2
     instance_type: linux_x2
@@ -165,3 +199,6 @@ workflows:
       - ui/espresso/IntentsAdvancedSample/app/build/outputs/androidTest-results/connected/**/*.xml
       - emulator.log
     
+
+
+
