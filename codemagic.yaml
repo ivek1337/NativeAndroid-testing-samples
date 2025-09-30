@@ -20,9 +20,9 @@ workflows:
             exit 1
           fi
           echo "javaVersion: $javaVersion"
-          # Save environment variables for subsequent steps
           echo "JAVA_VERSION=$javaVersion" >> $CM_ENV
-          echo "JAVA_HOME=/usr/lib/jvm/java-$javaVersion-openjdk-amd64" >> $CM_ENV
+          # macOS typical Zulu JDK path on Codemagic:
+          echo "JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-$javaVersion.jdk/Contents/Home" >> $CM_ENV
       - name: Build with extracted Java version
         script: |
           echo "Using JAVA_VERSION=$JAVA_VERSION and JAVA_HOME=$JAVA_HOME"
