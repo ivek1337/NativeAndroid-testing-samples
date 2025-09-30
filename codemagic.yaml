@@ -1,16 +1,16 @@
 workflows:
-  test java extraction:
-    name: jave ver extraction
+  test-java-extraction:
+    name: java ver extraction
     instance_type: mac_mini_m2
     working_directory: ui/espresso/BasicSample
     max_build_duration: 60
     environment:
       vars:
-        ANDROID_EMULATOR_NAME: "emulator-34" # Use one of Codemagic's preinstalled emulators: emulator, emulator-35, emulator-36
+        ANDROID_EMULATOR_NAME: "emulator-34"
     scripts:
-      - name: Extract Java version from build.gradle and set JAVA_VERSION
+      - name: Extract Java version from build.gradle and set JAVA_VERSION and JAVA_HOME
         script: |
-          echo "we have JAVA_VERSION=$JAVA_VERSION and JAVA_HOME=$JAVA_HOME"
+          echo "Before extraction: JAVA_VERSION=$JAVA_VERSION, JAVA_HOME=$JAVA_HOME"
           set -e
           BUILD_FILE="build.gradle"
           VERSION_EXTRACTOR="grep -E 'javaVersion\s*=' \"$BUILD_FILE\" | sed -E 's/.*JavaVersion\.VERSION_([0-9]+).*/\1/'"
@@ -20,11 +20,9 @@ workflows:
             exit 1
           fi
           echo "javaVersion: $javaVersion"
-          envman add --key JAVA_VERSION --value "${javaVersion}"
-      - name: Set JAVA_HOME based on JAVA_VERSION
-        script: |
-          export JAVA_HOME="/usr/lib/jvm/java-$JAVA_VERSION-openjdk-amd64"
-          echo "JAVA_HOME=$JAVA_HOME" >> $CM_ENV
+          # Save environment variables for subsequent steps
+          echo "JAVA_VERSION=$javaVersion" >> $CM_ENV
+          echo "JAVA_HOME=/usr/lib/jvm/java-$javaVersion-openjdk-amd64" >> $CM_ENV
       - name: Build with extracted Java version
         script: |
           echo "Using JAVA_VERSION=$JAVA_VERSION and JAVA_HOME=$JAVA_HOME"
