@@ -10,6 +10,7 @@ workflows:
     scripts:
       - name: Extract Java version from build.gradle and set JAVA_VERSION
         script: |
+          echo "we have JAVA_VERSION=$JAVA_VERSION and JAVA_HOME=$JAVA_HOME"
           set -e
           BUILD_FILE="build.gradle"
           VERSION_EXTRACTOR="grep -E 'javaVersion\s*=' \"$BUILD_FILE\" | sed -E 's/.*JavaVersion\.VERSION_([0-9]+).*/\1/'"
